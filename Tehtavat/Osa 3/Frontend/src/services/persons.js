@@ -10,7 +10,6 @@ const addPerson = newPerson =>
     axios.post(baseURL, newPerson)
          .then(response => response.data)
 
-
 const deletePerson = id =>
     axios.delete(`${baseURL}/${id}`)
 

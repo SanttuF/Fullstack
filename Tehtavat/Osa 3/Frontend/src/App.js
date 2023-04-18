@@ -40,9 +40,14 @@ const App = () => {
 
       perService
         .addPerson(person)
-          .then(rPerson => {setPersons(persons.concat(rPerson))}) 
-    
-      displayNotification(`Added ${person.name}`)
+          .then(rPerson => {
+            setPersons(persons.concat(rPerson))
+            displayNotification(`Added ${person.name}`)
+          }) 
+          .catch(error => {
+            console.log(error.response)
+            displayError(error.response.data.error)
+          })
     }
 
     setNewName("")
