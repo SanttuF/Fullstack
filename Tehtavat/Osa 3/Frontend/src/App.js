@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import AddForm from './components/AddForm'
@@ -7,7 +8,7 @@ import Error from './components/Error'
 import perService from './services/persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([]) 
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setNewFilter] = useState('')
@@ -17,9 +18,9 @@ const App = () => {
   useEffect(() => {
     perService
       .getPersons()
-        .then(rPersons => {
-          setPersons(rPersons)
-        })
+      .then(rPersons => {
+        setPersons(rPersons)
+      })
   }, [])
 
   const addName = (event) => {
@@ -40,35 +41,35 @@ const App = () => {
 
       perService
         .addPerson(person)
-          .then(rPerson => {
-            setPersons(persons.concat(rPerson))
-            displayNotification(`Added ${person.name}`)
-          }) 
-          .catch(error => {
-            console.log(error.response)
-            displayError(error.response.data.error)
-          })
+        .then(rPerson => {
+          setPersons(persons.concat(rPerson))
+          displayNotification(`Added ${person.name}`)
+        })
+        .catch(error => {
+          console.log(error.response)
+          displayError(error.response.data.error)
+        })
     }
 
-    setNewName("")
-    setNewNumber("")
+    setNewName('')
+    setNewNumber('')
   }
 
   const editNumber = person => {
     perService
       .replaceNumber(person)
-        .then(rPerson => {
-          setPersons(persons.map(p => p.id === person.id ? rPerson : p))
-          displayNotification(`Updated ${person.name}'s number`)
-        })
-        .catch(() => {
-          displayError(`Information of ${person.name} has already been removed from server`)
-          setPersons(persons.filter(p => p.id !== person.id))
-        })
+      .then(rPerson => {
+        setPersons(persons.map(p => p.id === person.id ? rPerson : p))
+        displayNotification(`Updated ${person.name}'s number`)
+      })
+      .catch(() => {
+        displayError(`Information of ${person.name} has already been removed from server`)
+        setPersons(persons.filter(p => p.id !== person.id))
+      })
   }
 
 
-  const namesToShow = persons.filter(person => 
+  const namesToShow = persons.filter(person =>
     person.name.toLowerCase().includes(
       filter.toLowerCase()
     )
@@ -114,7 +115,6 @@ const App = () => {
       <Contents namesToShow={namesToShow} deleteName={deleteName}/>
     </div>
   )
-
 }
 
 export default App
