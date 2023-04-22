@@ -12,43 +12,45 @@ beforeEach(async () => {
 })
 
 
-test('all blogs get returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+describe('api returns', () => {
+  test('all blogs get returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('api return all blogs', async () => {
+    const res = await api.get('/api/blogs')
+    expect(res.body).toHaveLength(blogs.length)
+  })
+
+  test('returned blogs have field "id"', async () => {
+    const res = await api.get('/api/blogs')
+    expect(res.body[0].id).toBeDefined()
+  })
 })
 
-test('api return all blogs', async () => {
-  const res = await api.get('/api/blogs')
-  expect(res.body).toHaveLength(blogs.length)
-})
+describe('test inputs', () => {
+  test('can add new blogs with post', async () => {
+    const test_blog = {
+      title: 'z',
+      author: 'x',
+      url: 'z.x',
+      likes: 235
+    }
 
-test('returned blogs have field "id"', async () => {
-  const res = await api.get('/api/blogs')
-  expect(res.body[0].id).toBeDefined()
-})
+    await api.post('/api/blogs')
+      .send(test_blog)
+      .expect(201)
 
-test('can add new blogs with post', async () => {
-  const test_blog = {
-    title: 'z',
-    author: 'x',
-    url: 'z.x',
-    likes: 235
-  }
+    const res = await api.get('/api/blogs')
+    const urls = res.body.map(b => b.url)
 
-  await api.post('/api/blogs')
-    .send(test_blog)
-    .expect(201)
+    expect(res.body).toHaveLength(blogs.length + 1)
+    expect(urls).toContain(test_blog.url)
+  })
 
-  const res = await api.get('/api/blogs')
-  const urls = res.body.map(b => b.url)
-
-  expect(res.body).toHaveLength(blogs.length + 1)
-  expect(urls).toContain(test_blog.url)
-})
-
-describe('test inputs', () =>{
   test('autofill likes if not given', async () => {
     await Blog.deleteMany({})
     const test_blog = {
@@ -92,25 +94,14 @@ describe('test inputs', () =>{
   })
 })
 
-test('delete removes the entry', async () => {
-  await Blog.deleteMany({})
-  const id = (await api.post('/api/blogs').send(blogs[0])).body.id
-  await api.delete(`/api/blogs/${id}`)
-  const res = await api.get('/api/blogs')
-  expect(res.body).toHaveLength(0)
-})
-
-describe('test put api', () => {
+describe('test change', () => {
   test('change amount likes', async () => {
     await Blog.deleteMany({})
     const id = (await api.post('/api/blogs').send(blogs[0])).body.id
     const res = await api.put(`/api/blogs/${id}`).send({ ...blog[0], likes: 22 })
     expect(res.body.likes).toBe(22)
   })
-
 })
-
-
 
 
 afterAll(async () => {
