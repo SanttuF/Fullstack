@@ -1,0 +1,23 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "abcc",
+  "author": "cde",
+  "url": "abc.cde",
+  "likes": 5
+}
+
+###
+GET http://localhost:3003/api/blogs
+
+###
+PUT http://localhost:3003/api/blogs/644314c31a220c06bd06f94b
+Content-Type: application/json
+
+{
+  "title": "abcc",
+  "author": "cde",
+  "url": "abc.cde",
+  "likes": 4010
+}
