@@ -16,8 +16,15 @@ const badPasswordUser = {
   password: '12'
 }
 
+const testUser = {
+  name: 'test user',
+  username: 'test',
+  password: '1234'
+}
+
 module.exports = {
   validUser,
   badUsernameUser,
-  badPasswordUser
+  badPasswordUser,
+  testUser
 }

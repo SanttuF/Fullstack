@@ -11,7 +11,7 @@ beforeEach(async () => {
 })
 
 describe('input validity tests', () => {
-  test('cant add two users with same username', async () => {
+  test('can add one but not two users with same username', async () => {
     await api
       .post('/api/users')
       .send(users.validUser)
