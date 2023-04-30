@@ -2,7 +2,7 @@ module.exports = {
   'env': {
     'browser': true,
     'es2021': true,
-    'node': true,
+    'node': true
   },
   'extends': [
     'eslint:recommended',
@@ -43,6 +43,11 @@ module.exports = {
       'error', { 'before': true, 'after': true }
     ],
     'no-console': 0,
-    'react/prop-types': 0,
+    'react/prop-types': 0
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
