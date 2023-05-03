@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import Blogs from './components/CreateBlog'
+import CreateBlogs from './components/CreateBlog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
@@ -57,6 +57,11 @@ const App = () => {
     await blogService.remove(blog)
     setBlogs(blogs.filter(b => b.id !== blog.id))
     notify(`blog ${blog.title} has been removed`)
+  }
+
+  const likeBlog = async blog => {
+    blog.likes = await blogService.like(blog)
+    reload()
   }
 
   const handleLogin = async (event) => {
@@ -120,13 +125,13 @@ const App = () => {
         </p>
 
         <Togglable buttonLabel='New blog' ref={blogFormRef}>
-          <Blogs
+          <CreateBlogs
             createBlog={addBlog}
           />
         </Togglable>
 
         {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} removeBlog={removeBlog} reload={reload} user={user} />
+          <Blog key={blog.id} blog={blog} removeBlog={removeBlog} likeBlog={likeBlog} user={user} />
         )}
       </>}
 
