@@ -1,11 +1,10 @@
 describe('Blog app', function() {
   beforeEach(function() {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
+    cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
     cy.create({
       name: 'test user',
       username: 'test',
       password: 'test123'})
-    cy.visit('http://localhost:3000')
   })
 
   it('Login form is shown', function() {
