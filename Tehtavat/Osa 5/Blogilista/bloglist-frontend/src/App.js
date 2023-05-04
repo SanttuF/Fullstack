@@ -12,9 +12,10 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const [r, setReload] = useState(false)
-
   const [noti, setNoti] = useState(null)
+
+  const [r, setReload] = useState(false)
+  const reload = () => { setReload(!r) }
 
   const blogFormRef = useRef()
 
@@ -39,10 +40,6 @@ const App = () => {
     setTimeout(() => {
       setNoti(null)
     }, 3000)
-  }
-
-  const reload = () => {
-    setReload(!r)
   }
 
   const addBlog = async newBlog => {
@@ -91,6 +88,7 @@ const App = () => {
       <div>
         username
         <input
+          id='username'
           type="text"
           value={username}
           name="Username"
@@ -100,13 +98,14 @@ const App = () => {
       <div>
         password
         <input
+          id='password'
           type="password"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button id='loginButton' type="submit">login</button>
     </form>
   )
 

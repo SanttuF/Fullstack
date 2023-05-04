@@ -13,11 +13,11 @@ const createBlog = jest.fn()
 test('form sends right information when creating a new blog entry', async () => {
 
 
-  render(<CreateBlog createBlog={createBlog}/>)
+  const { container } = render(<CreateBlog createBlog={createBlog}/>)
 
-  const titleInput = screen.getByPlaceholderText('title')
-  const authorInput = screen.getByPlaceholderText('author')
-  const urlInput = screen.getByPlaceholderText('url')
+  const titleInput = container.querySelector('#title')
+  const authorInput = container.querySelector('#author')
+  const urlInput = container.querySelector('#url')
 
   const fakeUser = userEvent.setup()
 
