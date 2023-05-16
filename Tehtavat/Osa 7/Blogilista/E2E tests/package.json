@@ -1,0 +1,9 @@
+{
+  "name": "E2ETests",
+  "devDependencies": {
+    "cypress": "^12.11.0"
+  },
+  "scripts": {
+    "cypress:open": "cypress open"
+  }
+}

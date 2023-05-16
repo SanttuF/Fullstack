@@ -1,0 +1,28 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMTIzIiwiaWQiOiI2NDQ3MmUyMDZiZjQyYzk0MThjMzNhNzMiLCJpYXQiOjE2ODIzODY0NzZ9.Z63GdckEx4CCkuvAXfRm5PmKXoPCJaWe0-VlCANsLu4
+
+{
+  "title": "abasfaadsdsdwqcdddadc",
+  "author": "cdffsdfsdfdse",
+  "url": "abfsdfc.cfdsfsdde",
+  "likes": 52434
+}
+
+###
+GET http://localhost:3003/api/blogs
+
+###
+PUT http://localhost:3003/api/blogs/644314c31a220c06bd06f94b
+Content-Type: application/json
+
+{
+  "title": "abcddc",
+  "author": "cde",
+  "url": "abc.cde",
+  "likes": 4010
+}
+
+###
+DELETE http://localhost:3003/api/blogs/64472e85b9c85618524ffe79
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMTIzIiwiaWQiOiI2NDQ3MmUyMDZiZjQyYzk0MThjMzNhNzMiLCJpYXQiOjE2ODIzODY0NzZ9.Z63GdckEx4CCkuvAXfRm5PmKXoPCJaWe0-VlCANsLu4
