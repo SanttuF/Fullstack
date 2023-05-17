@@ -1,46 +1,48 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, removeBlog, likeBlog, user }) => {
-  Blog.propTypes = {
-    blog: PropTypes.object.isRequired,
-    likeBlog: PropTypes.func.isRequired,
-    removeBlog: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired,
-  }
+const Blog = ({ blog, like, canRemove, remove }) => {
+  const [visible, setVisible] = useState(false)
 
-  const [showAll, setShowAll] = useState(false)
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
-  if (showAll) {
-    return (
-      <div style={blogStyle}>
-        {blog.title} {blog.author}{' '}
-        <button onClick={() => setShowAll(false)}>hide</button> <br />
-        {blog.url} <br />
-        {blog.likes}
-        <button onClick={() => likeBlog(blog)}>like</button> <br />
-        {blog.user.name} <br />
-        {user.username === blog.user.username && (
-          <button onClick={() => removeBlog(blog)}>remove</button>
-        )}
-      </div>
-    )
+  const style = {
+    marginBottom: 2,
+    padding: 5,
+    borderStyle: 'solid',
   }
 
   return (
-    <div style={blogStyle} className="blog">
-      {blog.title} {blog.author}{' '}
-      <button onClick={() => setShowAll(true)}>view</button>
+    <div style={style} className="blog">
+      {blog.title} {blog.author}
+      <button onClick={() => setVisible(!visible)}>
+        {visible ? 'hide' : 'show'}
+      </button>
+      {visible && (
+        <div>
+          <div>
+            {' '}
+            <a href={blog.url}> {blog.url}</a>{' '}
+          </div>
+          <div>
+            likes {blog.likes} <button onClick={like}>like</button>
+          </div>
+          <div>{blog.user && blog.user.name}</div>
+          {canRemove && <button onClick={remove}>delete</button>}
+        </div>
+      )}
     </div>
   )
+}
+
+Blog.propTypes = {
+  like: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired,
+  canRemove: PropTypes.bool,
+  blog: PropTypes.shape({
+    title: PropTypes.string,
+    author: PropTypes.string,
+    url: PropTypes.string,
+    likes: PropTypes.number,
+  }),
 }
 
 export default Blog

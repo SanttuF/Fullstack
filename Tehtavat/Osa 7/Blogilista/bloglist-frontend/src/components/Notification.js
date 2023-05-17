@@ -1,10 +1,14 @@
-const Notification = ({ message }) => {
-  if (!message) {
+import { useNotificationValue } from '../contexts/NotificationContext'
+
+const Notification = () => {
+  const info = useNotificationValue()
+
+  if (!info.message) {
     return
   }
 
   const style = {
-    color: 'black',
+    color: info.type === 'error' ? 'red' : 'green',
     background: 'lightgrey',
     fontSize: 20,
     borderStyle: 'solid',
@@ -13,11 +17,7 @@ const Notification = ({ message }) => {
     marginBottom: 10,
   }
 
-  return (
-    <div className="error" style={style}>
-      {message}
-    </div>
-  )
+  return <div style={style}>{info.message}</div>
 }
 
 export default Notification

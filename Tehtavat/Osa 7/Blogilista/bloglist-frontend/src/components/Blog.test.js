@@ -2,54 +2,60 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+
 import Blog from './Blog'
 
-const blog = {
-  title: 'test title',
-  author: 'test author',
-  url: 'test.url',
-  likes: 1,
-  user: {
-    name: 'test name',
-    username: 'test username',
-  },
-}
-const likeBlog = jest.fn()
-const removeBlog = jest.fn()
-const user = {}
+describe('Blog', () => {
+  const blog = {
+    title: 'Goto considered harmful',
+    author: 'Edsger Dijkstra',
+    url: 'google.com',
+    likes: 1,
+  }
 
-test('render only title and author at first', () => {
-  render(
-    <Blog blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} user={user} />
-  )
+  const likeHandler = jest.fn()
 
-  screen.getByText('test title test author')
-})
+  beforeEach(() => {
+    render(
+      <Blog
+        blog={blog}
+        remove={jest.fn()}
+        canRemove={true}
+        like={likeHandler}
+      />
+    )
+  })
 
-test('render all info after button press', async () => {
-  render(
-    <Blog blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} user={user} />
-  )
+  test('renders only title and author by default', () => {
+    screen.getByText(blog.title, { exact: false })
+    screen.getByText(blog.author, { exact: false })
 
-  const fakeUser = userEvent.setup()
-  const button = screen.getByText('view')
-  await fakeUser.click(button)
+    const ulrElement = screen.queryByText(blog.url, { exact: false })
+    expect(ulrElement).toBeNull()
 
-  screen.getByText('test title test author test.url 1 test name')
-})
+    const likesElement = screen.queryByText('likes', { exact: false })
+    expect(likesElement).toBeNull()
+  })
 
-test('like button works', async () => {
-  render(
-    <Blog blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} user={user} />
-  )
+  test('renders also details when asked to be shown', async () => {
+    const user = userEvent.setup()
+    const button = screen.getByText('show')
+    await user.click(button)
 
-  const fakeUser = userEvent.setup()
-  const showButton = screen.getByText('view')
-  await fakeUser.click(showButton)
+    screen.getByText(blog.url, { exact: false })
+    screen.getByText(`likes ${blog.likes}`, { exact: false })
+  })
 
-  const likeButton = screen.getByText('like')
-  await fakeUser.click(likeButton)
-  await fakeUser.click(likeButton)
+  test('if liked twice, ', async () => {
+    const user = userEvent.setup()
 
-  expect(likeBlog.mock.calls).toHaveLength(2)
+    const showButton = screen.getByText('show')
+    await user.click(showButton)
+
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    expect(likeHandler.mock.calls).toHaveLength(2)
+  })
 })
