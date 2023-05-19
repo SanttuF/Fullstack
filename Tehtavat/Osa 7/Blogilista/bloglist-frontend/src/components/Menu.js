@@ -3,18 +3,9 @@ import { useUserDispatch } from '../contexts/UserContext'
 import storageService from '../services/storage'
 import { useNotify } from '../contexts/NotificationContext'
 import { useUserValue } from '../contexts/UserContext'
-import { Paper } from '@mui/material'
+import { AppBar, Toolbar, Button } from '@mui/material'
 
 const Menu = () => {
-  const pad = {
-    padding: 5,
-    color: 'steelblue',
-  }
-  const borderStyle = {
-    padding: 5,
-    marginBottom: 10,
-  }
-
   const user = useUserValue()
   const userDispatch = useUserDispatch()
   const notifyWith = useNotify()
@@ -26,18 +17,22 @@ const Menu = () => {
   }
 
   return (
-    <Paper style={borderStyle} elevation={8}>
-      <Link to="/" style={pad}>
-        blogs
-      </Link>
-      <Link to="/users" style={pad}>
-        users
-      </Link>
-      <>
-        {user.name} logged in
-        <button onClick={logout}>logout</button>
-      </>
-    </Paper>
+    <AppBar position="static">
+      <Toolbar>
+        <Button to="/" component={Link}>
+          blogs
+        </Button>
+        <Button to="/users" component={Link}>
+          users
+        </Button>
+        <div style={{ marginLeft: 20 }}>
+          {user.name} logged in
+          <Button onClick={logout} variant="outlined" style={{ marginLeft: 5 }}>
+            logout
+          </Button>
+        </div>
+      </Toolbar>
+    </AppBar>
   )
 }
 

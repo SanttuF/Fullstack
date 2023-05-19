@@ -18,7 +18,7 @@ const Togglable = forwardRef((props, ref) => {
   })
 
   const style = {
-    margin: 7,
+    marginBottom: 7,
   }
 
   return (

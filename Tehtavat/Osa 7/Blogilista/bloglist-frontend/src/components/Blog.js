@@ -4,6 +4,7 @@ import { useUserValue } from '../contexts/UserContext'
 import { useNotify } from '../contexts/NotificationContext'
 import blogService from '../services/blogs'
 import CommentForm from './CommentForm'
+import { Button } from '@mui/material'
 
 const Blog = () => {
   const notifyWith = useNotify()
@@ -34,7 +35,7 @@ const Blog = () => {
   const like = () => {
     const blogToUpdate = { ...blog, likes: blog.likes + 1, user: blog.user.id }
     updateBlogMutation.mutate(blogToUpdate)
-    notifyWith(`Lked the blog '${blog.title}' by '${blog.author}'`)
+    notifyWith(`Lked the blog '${blog.title}' by '${blog.author}'`, 'success')
   }
 
   const remove = () => {
@@ -56,12 +57,21 @@ const Blog = () => {
         {blog.title} {blog.author}
       </h2>
       <div>
-        <a href={blog.url}> {blog.url}</a>{' '}
-        <div>
-          likes {blog.likes} <button onClick={like}>like</button>
-        </div>
-        <div>added by {blog.user.name}</div>
-        {canRemove && <button onClick={remove}>delete</button>}
+        <a href={blog.url} style={{ color: 'steelblue' }}>
+          {blog.url}
+        </a>
+        <p>
+          likes {blog.likes}{' '}
+          <Button variant="outlined" onClick={like}>
+            like
+          </Button>
+        </p>
+        <p>added by {blog.user.name}</p>
+        {canRemove && (
+          <Button onClick={remove} variant="contained">
+            delete
+          </Button>
+        )}
       </div>
 
       <h4>Comments</h4>

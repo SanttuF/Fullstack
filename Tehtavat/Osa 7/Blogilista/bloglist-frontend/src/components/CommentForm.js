@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import blogService from '../services/blogs'
+import { Button, TextField } from '@mui/material'
 
 const CommentForm = ({ blog }) => {
   const [comment, setComment] = useState('')
@@ -25,15 +26,17 @@ const CommentForm = ({ blog }) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input
+        <TextField
           id="comment"
-          placeholder="comment"
           value={comment}
+          size="small"
           onChange={({ target }) => {
             setComment(target.value)
           }}
         />
-        <button type="submit">add comment</button>
+        <Button type="submit" variant="contained">
+          add comment
+        </Button>
       </form>
       <ul>
         {blog.comments.map((c, i) => (

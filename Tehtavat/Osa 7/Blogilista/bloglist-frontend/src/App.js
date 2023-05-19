@@ -33,11 +33,16 @@ const App = () => {
 
   if (!user) {
     return (
-      <div>
-        <h2>log in to application</h2>
-        <Notification />
-        <LoginForm />
-      </div>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Container
+          component={Paper}
+          style={{ paddingTop: 20, paddingBottom: 50 }}
+        >
+          <Notification />
+          <LoginForm />
+        </Container>
+      </ThemeProvider>
     )
   }
 
@@ -47,7 +52,7 @@ const App = () => {
       <Container component={Paper} style={{ paddingBottom: 50 }}>
         <Menu />
         <Notification />
-        <h1>blog app</h1>
+        <h1>Blog app</h1>
         <Routes>
           <Route path="/" element={<Blogs />} />
           <Route path="/blogs/:id" element={<Blog />} />

@@ -1,6 +1,14 @@
 import { useQuery } from 'react-query'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import userServices from '../services/users'
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+} from '@mui/material'
 
 const User = () => {
   const r = useQuery('users', userServices.getAll)
@@ -16,12 +24,24 @@ const User = () => {
   return (
     <>
       <h2>{user.name}</h2>
-      <h4>added blogs</h4>
-      <ul>
-        {user.blogs.map((b) => (
-          <li key={b.id}>{b.title} </li>
-        ))}
-      </ul>
+      <h4>Added blogs</h4>
+      <TableContainer component={Paper} style={{ backgroundColor: 'darkgray' }}>
+        <Table>
+          <TableBody>
+            {user.blogs.map((blog) => (
+              <TableRow key={blog.id}>
+                <TableCell>
+                  <Link to={`/blogs/${blog.id}`} style={{ color: 'steelblue' }}>
+                    <strong>
+                      {blog.title} {blog.author}
+                    </strong>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   )
 }

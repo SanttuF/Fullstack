@@ -24,7 +24,7 @@ const Blogs = () => {
 
   return (
     <>
-      <h2>blogs</h2>
+      <h2>logs</h2>
       <NewBlog />
       <TableContainer component={Paper} style={{ backgroundColor: 'darkgray' }}>
         <Table>
