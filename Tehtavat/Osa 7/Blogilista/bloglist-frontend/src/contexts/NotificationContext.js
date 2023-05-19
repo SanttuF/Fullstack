@@ -25,6 +25,25 @@ export const NotificationContextProvider = (props) => {
 }
 
 export const useNotificationValue = () => useContext(NotificationContext)[0]
-export const useNotificationDispatch = () => useContext(NotificationContext)[1]
+
+export const useNotify = () => {
+  const notiDispatch = useContext(NotificationContext)[1]
+
+  const notifyWith = (message, type = 'info') => {
+    notiDispatch({
+      type: 'SET_NOTIFICATION',
+      payload: {
+        message,
+        type,
+      },
+    })
+
+    setTimeout(() => {
+      notiDispatch({ type: 'CLEAR_NOTIFICATION' })
+    }, 3000)
+  }
+
+  return notifyWith
+}
 
 export default NotificationContext

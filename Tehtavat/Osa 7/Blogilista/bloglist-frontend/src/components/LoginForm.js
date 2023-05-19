@@ -1,12 +1,28 @@
 import { useState } from 'react'
 
-const LoginForm = ({ onLogin }) => {
+import loginService from '../services/login'
+import storageService from '../services/storage'
+
+import { useUserDispatch } from '../contexts/UserContext'
+import { useNotify } from '../contexts/NotificationContext'
+
+const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (event) => {
+  const userDispatch = useUserDispatch()
+  const notifyWith = useNotify()
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    onLogin(username, password)
+    try {
+      const user = await loginService.login({ username, password })
+      userDispatch({ type: 'SET_USER', payload: user })
+      storageService.saveUser(user)
+      notifyWith(`Welcome ${user.name}`, 'success')
+    } catch (e) {
+      notifyWith('wrong username or password', 'error')
+    }
   }
 
   return (
