@@ -2,7 +2,10 @@ import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
-  const res = useQuery(ALL_BOOKS)
+  const res = useQuery(ALL_BOOKS, {
+    variables: {},
+    fetchPolicy: 'no-cache',
+  })
 
   if (!props.show) {
     return null
@@ -14,10 +17,18 @@ const Books = (props) => {
     books = res.data.allBooks
   }
 
+  const handleFilter = (event) => {
+    event.preventDefault()
+    res.refetch({ genre: event.target.genre.value })
+  }
+
   return (
     <div>
       <h2>books</h2>
-
+      <form onSubmit={handleFilter}>
+        <input placeholder="genre" id="genre" />
+        <button type="submit">filter</button>
+      </form>
       <table>
         <tbody>
           <tr>
@@ -28,7 +39,7 @@ const Books = (props) => {
           {books.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
-              <td>{a.author}</td>
+              <td>{a.author.name}</td>
               <td>{a.published}</td>
             </tr>
           ))}
