@@ -4,7 +4,6 @@ import { ALL_BOOKS } from '../queries'
 const Books = (props) => {
   const res = useQuery(ALL_BOOKS, {
     variables: {},
-    fetchPolicy: 'no-cache',
   })
 
   if (!props.show) {

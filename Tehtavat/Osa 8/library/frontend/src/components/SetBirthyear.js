@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ALL_AUTHORS, UPDATE_AUTHOR } from '../queries'
 
 const SetBirthyear = () => {
@@ -10,6 +10,12 @@ const SetBirthyear = () => {
     refetchQueries: [{ query: ALL_AUTHORS }],
   })
   const res = useQuery(ALL_AUTHORS)
+
+  useEffect(() => {
+    if (!res.loading && res.data.allAuthors.length !== 0) {
+      setName(res.data.allAuthors[0].name)
+    }
+  }, [res])
 
   let authors = []
 

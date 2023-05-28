@@ -3,19 +3,10 @@ const jwt = require('jsonwebtoken')
 const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 
 const resolvers = {
-  Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({}).populate('author', { name: 1 })
-      const filteredBooks = books.filter(
-        (b) => b.author.name === root.name
-      ).length
-      return filteredBooks
-    },
-
-    // bookCount: (root) => Book.collection.countDocuments({ author: { name: root.name } }),
-  },
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
@@ -86,7 +77,7 @@ const resolvers = {
 
       let author = await Author.findOne({ name: args.author })
       if (!author) {
-        author = new Author({ name: args.author })
+        author = new Author({ name: args.author, bookCount: 0 })
         try {
           await author.save()
         } catch (error) {
@@ -104,7 +95,7 @@ const resolvers = {
       }
       const book = new Book({ ...args, author })
       try {
-        return book.save()
+        await book.save()
       } catch (error) {
         throw new GraphQLError('Saving book failed', {
           extensions: {
@@ -114,6 +105,11 @@ const resolvers = {
           },
         })
       }
+
+      await Author.updateOne({ name: author.name }, { $inc: { bookCount: 1 } })
+
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
+      return book
     },
 
     editAuthor: async (root, args, { currentUser }) => {
@@ -140,6 +136,11 @@ const resolvers = {
           },
         })
       }
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator('BOOK_ADDED'),
     },
   },
 }
