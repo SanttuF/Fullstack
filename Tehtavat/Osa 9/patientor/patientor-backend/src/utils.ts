@@ -1,4 +1,12 @@
-import { Gender, NewPatient } from './types';
+import {
+  Diagnosis,
+  Discharge,
+  Gender,
+  HealthCheckRating,
+  NewEntry,
+  NewPatient,
+  SickLeave,
+} from './types';
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -37,8 +45,6 @@ const parseGender = (gender: unknown): Gender => {
 };
 
 const toNewPatient = (object: unknown): NewPatient => {
-  console.log(object);
-
   if (!object || typeof object !== 'object') {
     throw new Error('Incorrect or missing data');
   }
@@ -65,4 +71,129 @@ const toNewPatient = (object: unknown): NewPatient => {
   throw new Error('Missing input field');
 };
 
-export default toNewPatient;
+const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> => {
+  if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+    // we will just trust the data to be in correct form
+    return [] as Array<Diagnosis['code']>;
+  }
+
+  return object.diagnosisCodes as Array<Diagnosis['code']>;
+};
+
+const isNumber = (num: unknown): num is number => {
+  return typeof num === 'number' || num instanceof Number;
+};
+
+const isHealthRating = (param: number): param is HealthCheckRating => {
+  return Object.values(HealthCheckRating)
+    .map((g) => g.valueOf() || console.log(g.valueOf()))
+    .includes(param);
+};
+
+const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
+  if (!isNumber(rating) || !isHealthRating(rating)) {
+    throw new Error('Incorrect HealthCkeckRating' + rating);
+  }
+  return rating;
+};
+
+const isSickLeave = (param: unknown): param is SickLeave => {
+  if ((param as SickLeave).startDate && (param as SickLeave).endDate) {
+    return true;
+  }
+  return false;
+};
+
+const parseSickLeave = (leave: unknown): SickLeave => {
+  if (isSickLeave(leave)) {
+    if (isString(leave.startDate) && isString(leave.endDate)) {
+      return leave;
+    }
+  }
+  throw new Error('Incorrect sick leave' + leave);
+};
+
+const isDischarge = (param: unknown): param is Discharge => {
+  if ((param as Discharge).date && (param as Discharge).criteria) {
+    return true;
+  }
+  return false;
+};
+
+const parseDischarge = (discharge: unknown): Discharge => {
+  if (
+    !isDischarge(discharge) ||
+    isDate(discharge.date) ||
+    isString(discharge.criteria)
+  ) {
+    throw new Error('Incorrect discharge' + discharge);
+  }
+  return discharge;
+};
+
+const toNewEntry = (object: unknown): NewEntry => {
+  if (!object || typeof object !== 'object') {
+    throw new Error('Incorrect or missing data');
+  }
+  if (
+    'description' in object &&
+    'date' in object &&
+    'specialist' in object &&
+    'type' in object
+  ) {
+    switch (object.type) {
+      case 'HealthCheck':
+        if ('healthCheckRating' in object) {
+          const newEntry: NewEntry = {
+            description: parseString(object.description),
+            date: parseDate(object.date),
+            specialist: parseString(object.specialist),
+            type: object.type,
+            healthCheckRating: parseHealthCheckRating(object.healthCheckRating),
+            diagnosisCodes: parseDiagnosisCodes(object),
+          };
+          return newEntry;
+        }
+
+        throw new Error('Missing input field');
+
+      case 'OccupationalHealthcare':
+        if ('employerName' in object) {
+          const newEntry: NewEntry = {
+            description: parseString(object.description),
+            date: parseDate(object.date),
+            specialist: parseString(object.specialist),
+            type: object.type,
+            employerName: parseString(object.employerName),
+            diagnosisCodes: parseDiagnosisCodes(object),
+          };
+
+          if ('sickLeave' in object) {
+            newEntry.sickLeave = parseSickLeave(object.sickLeave);
+          }
+
+          return newEntry;
+        }
+        throw new Error('Missing input field');
+
+      case 'Hospital':
+        if ('discharge' in object) {
+          const newEntry: NewEntry = {
+            description: parseString(object.description),
+            date: parseDate(object.date),
+            specialist: parseString(object.specialist),
+            type: object.type,
+            discharge: parseDischarge(object.discharge),
+            diagnosisCodes: parseDiagnosisCodes(object),
+          };
+          return newEntry;
+        }
+
+        throw new Error('Missing input field');
+    }
+  }
+
+  throw new Error('Missing input field');
+};
+
+export default { toNewPatient, toNewEntry };

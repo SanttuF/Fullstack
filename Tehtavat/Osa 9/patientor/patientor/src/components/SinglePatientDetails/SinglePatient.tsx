@@ -14,19 +14,24 @@ const SinglePatient = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
     patientService.getId(id).then((res) => setPatient(res));
   }, [id]);
 
-  const style = {
-    borderStyle: "solid",
-  };
-
   if (!patient) return <>loading...</>;
 
   return (
     <div>
       <h2>{patient.name}</h2>
-      <div>gender: {patient.gender}</div>
-      <div>ssn: {patient.ssn}</div>
-      <div>occupation: {patient.occupation}</div>
-      <h3>entries</h3>
+      <div>
+        <strong>gender: </strong>
+        {patient.gender}
+      </div>
+      <div>
+        <strong>ssn: </strong>
+        {patient.ssn}
+      </div>
+      <div>
+        <strong>occupation: </strong>
+        {patient.occupation}
+      </div>
+      <h3>Entries</h3>
       {patient.entries.map((e: Entry) => (
         <EntryDetails key={e.id} diagnoses={diagnoses} entry={e} />
       ))}

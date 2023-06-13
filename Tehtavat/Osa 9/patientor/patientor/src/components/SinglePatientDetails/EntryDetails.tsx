@@ -1,4 +1,4 @@
-import { Diagnosis, Entry } from "../../types";
+import { Diagnosis, Entry, HealthCheckRating } from "../../types";
 
 const assertNever = (value: never): never => {
   throw new Error(
@@ -39,6 +39,7 @@ const EntryDetails = ({
           </div>
         </div>
       );
+
     case "OccupationalHealthcare":
       return (
         <div style={style}>
@@ -54,6 +55,7 @@ const EntryDetails = ({
           </div>
         </div>
       );
+
     case "HealthCheck":
       return (
         <div style={style}>
@@ -63,7 +65,10 @@ const EntryDetails = ({
             </strong>
           </div>
           <div>{entry.description}</div>
-          <div>rating: {entry.healthCheckRating}</div>
+          <div>
+            <strong>Rating: </strong>
+            {HealthCheckRating[entry.healthCheckRating]}
+          </div>
           <div>
             <strong>Diagnosed by </strong>
             {entry.specialist}
