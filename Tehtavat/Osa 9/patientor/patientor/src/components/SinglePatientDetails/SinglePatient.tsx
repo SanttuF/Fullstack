@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Patient, Entry, Diagnosis } from "../../types";
 import patientService from "../../services/patients";
 import EntryDetails from "./EntryDetails";
+import NewEntryForm from "./NewEntryForm";
 
 const SinglePatient = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -31,6 +32,11 @@ const SinglePatient = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
         <strong>occupation: </strong>
         {patient.occupation}
       </div>
+      <NewEntryForm
+        patient={patient}
+        setPatient={setPatient}
+        diagnoses={diagnoses}
+      />
       <h3>Entries</h3>
       {patient.entries.map((e: Entry) => (
         <EntryDetails key={e.id} diagnoses={diagnoses} entry={e} />

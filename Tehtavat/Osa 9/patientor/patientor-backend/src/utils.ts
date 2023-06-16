@@ -86,7 +86,7 @@ const isNumber = (num: unknown): num is number => {
 
 const isHealthRating = (param: number): param is HealthCheckRating => {
   return Object.values(HealthCheckRating)
-    .map((g) => g.valueOf() || console.log(g.valueOf()))
+    .map((g) => g.valueOf())
     .includes(param);
 };
 
@@ -106,7 +106,7 @@ const isSickLeave = (param: unknown): param is SickLeave => {
 
 const parseSickLeave = (leave: unknown): SickLeave => {
   if (isSickLeave(leave)) {
-    if (isString(leave.startDate) && isString(leave.endDate)) {
+    if (parseDate(leave.startDate) && parseDate(leave.endDate)) {
       return leave;
     }
   }
@@ -123,8 +123,8 @@ const isDischarge = (param: unknown): param is Discharge => {
 const parseDischarge = (discharge: unknown): Discharge => {
   if (
     !isDischarge(discharge) ||
-    isDate(discharge.date) ||
-    isString(discharge.criteria)
+    !isDate(discharge.date) ||
+    !isString(discharge.criteria)
   ) {
     throw new Error('Incorrect discharge' + discharge);
   }
@@ -155,7 +155,7 @@ const toNewEntry = (object: unknown): NewEntry => {
           return newEntry;
         }
 
-        throw new Error('Missing input field');
+        throw new Error('Missing input field: healthCheck');
 
       case 'OccupationalHealthcare':
         if ('employerName' in object) {
@@ -193,7 +193,7 @@ const toNewEntry = (object: unknown): NewEntry => {
     }
   }
 
-  throw new Error('Missing input field');
+  throw new Error('Missing input field: main');
 };
 
 export default { toNewPatient, toNewEntry };

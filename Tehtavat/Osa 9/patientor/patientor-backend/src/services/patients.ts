@@ -30,7 +30,6 @@ const addPatient = (patient: NewPatient): Patient => {
 
 const addEntry = (id: string, newEntry: NewEntry): Patient | undefined => {
   const patient = patients.find((p) => p.id === id);
-  console.log(newEntry);
 
   if (!patient) throw new Error('No patient with that id' + id);
 
