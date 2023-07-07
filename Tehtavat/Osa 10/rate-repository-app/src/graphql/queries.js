@@ -29,6 +29,20 @@ export const ID = gql`
     repository(id: $id) {
       url
       ...baseInfo
+      reviews {
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+        }
+      }
     }
   }
 `

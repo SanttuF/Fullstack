@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 5,
   },
-  image: {},
-
   language: {
     backgroundColor: theme.colors.primary,
     color: theme.colors.light,

@@ -9,6 +9,7 @@ const theme = {
     light: 'white',
     mainBackground: 'lightgrey',
     error: 'red',
+    secondaryBlue: '#579eeb',
   },
   fontSizes: {
     body: 14,
