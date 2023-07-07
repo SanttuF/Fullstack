@@ -1,18 +1,16 @@
-import { useQuery } from '@apollo/client'
-import { ID } from '../graphql/queries'
-import { View } from 'react-native-web'
 import { RepositoryItem } from './RepositoryItem'
+import { useParams } from 'react-router-native'
+import useRepository from '../hooks/useRepository'
 
 const SingleItem = () => {
-  const r = useQuery(ID, { variables: { id: 'jaredpalmer.formik' } })
+  const id = useParams().id
+  const { repository } = useRepository(id)
 
-  if (r.loading) {
+  if (!repository) {
     return <></>
   }
 
-  console.log(r)
-
-  return <View>{/* <RepositoryItem item={data}></RepositoryItem> */}</View>
+  return <RepositoryItem item={repository}></RepositoryItem>
 }
 
 export default SingleItem

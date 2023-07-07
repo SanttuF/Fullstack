@@ -1,19 +1,13 @@
 import { gql } from '@apollo/client'
+import { BASE_INFO } from './fragments'
 
 export const GET_REPOSITORIES = gql`
+  ${BASE_INFO}
   query {
     repositories {
       edges {
         node {
-          id
-          description
-          fullName
-          forksCount
-          language
-          ownerAvatarUrl
-          ratingAverage
-          reviewCount
-          stargazersCount
+          ...baseInfo
         }
       }
     }
@@ -30,9 +24,11 @@ export const ME = gql`
 `
 
 export const ID = gql`
+  ${BASE_INFO}
   query id($id: ID!) {
     repository(id: $id) {
       url
+      ...baseInfo
     }
   }
 `

@@ -3,6 +3,7 @@ import Text from './Text'
 import theme from '../theme'
 import Stat from './Stat'
 import { useNavigate } from 'react-router-native'
+import LinkButton from './LinkButton'
 
 const styles = StyleSheet.create({
   container: {
@@ -67,7 +68,7 @@ export const RepositoryItem = ({ item }) => {
         <Stat label="Reviews" number={item.reviewCount} />
         <Stat label="Rating" number={item.ratingAverage} />
       </View>
-      {item.url !== undefined ? console.log(item.url) : null}
+      {item.url !== undefined ? <LinkButton url={item.url} /> : null}
     </View>
   )
 }
@@ -81,8 +82,7 @@ const RepositoryItemWrap = ({ item }) => {
   )
 }
 
-// for some reason needed to make useNavigation hook work,
-// can't call it in here either
+// for some reason needed to make useNavigate hook work,
 const RepositoryItemWrapWrap = ({ item }) => {
   return <RepositoryItemWrap item={item} />
 }
