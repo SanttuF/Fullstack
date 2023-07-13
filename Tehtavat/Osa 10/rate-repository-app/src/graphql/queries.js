@@ -1,10 +1,18 @@
 import { gql } from '@apollo/client'
-import { BASE_INFO } from './fragments'
+import { BASE_INFO, REVIEW_INFO } from './fragments'
 
 export const GET_REPOSITORIES = gql`
   ${BASE_INFO}
-  query {
-    repositories {
+  query Repositories(
+    $orderBy: AllRepositoriesOrderBy
+    $orderDirection: OrderDirection
+    $searchKeyword: String
+  ) {
+    repositories(
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      searchKeyword: $searchKeyword
+    ) {
       edges {
         node {
           ...baseInfo
@@ -23,23 +31,17 @@ export const ME = gql`
   }
 `
 
-export const ID = gql`
+export const REPOSITORY = gql`
   ${BASE_INFO}
-  query id($id: ID!) {
+  ${REVIEW_INFO}
+  query Repository($id: ID!) {
     repository(id: $id) {
       url
       ...baseInfo
       reviews {
         edges {
           node {
-            id
-            text
-            rating
-            createdAt
-            user {
-              id
-              username
-            }
+            ...reviewInfo
           }
         }
       }

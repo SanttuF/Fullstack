@@ -1,8 +1,11 @@
 import { useQuery } from '@apollo/client'
-import { ID } from '../graphql/queries'
+import { REPOSITORY } from '../graphql/queries'
 
 const useRepository = (id) => {
-  const { data, loading } = useQuery(ID, { variables: { id } })
+  const { data, loading } = useQuery(REPOSITORY, {
+    variables: { id },
+    fetchPolicy: 'cache-and-network',
+  })
 
   if (loading) {
     return { repository: null, loading }

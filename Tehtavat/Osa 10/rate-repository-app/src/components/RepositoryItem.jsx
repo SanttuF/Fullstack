@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   },
   text: {
     flexWrap: 'wrap',
+    maxWidth: 600,
   },
   stats: {
     flexDirection: 'row',
