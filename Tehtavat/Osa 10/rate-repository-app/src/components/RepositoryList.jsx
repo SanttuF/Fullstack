@@ -24,21 +24,6 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />
 
-// export const RepositoryListContainer = ({ repositories, Header }) => {
-//   const repositoryNodes = repositories
-//     ? repositories.edges.map((edge) => edge.node)
-//     : []
-
-//   return (
-//     <FlatList
-//       ListHeaderComponent={Header}
-//       data={repositoryNodes}
-//       ItemSeparatorComponent={ItemSeparator}
-//       renderItem={RepositoryItemWrapWrap}
-//     />
-//   )
-// }
-
 export class RepositoryListContainer extends React.Component {
   renderHeader = () => {
     const { order, filter, setOrder, setFilter } = this.props
