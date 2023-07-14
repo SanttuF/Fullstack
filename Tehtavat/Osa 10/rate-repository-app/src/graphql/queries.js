@@ -4,16 +4,27 @@ import { BASE_INFO, REVIEW_INFO } from './fragments'
 export const GET_REPOSITORIES = gql`
   ${BASE_INFO}
   query Repositories(
-    $orderBy: AllRepositoriesOrderBy
+    $after: String
+    $first: Int
     $orderDirection: OrderDirection
+    $orderBy: AllRepositoriesOrderBy
     $searchKeyword: String
   ) {
     repositories(
-      orderBy: $orderBy
+      after: $after
+      first: $first
       orderDirection: $orderDirection
+      orderBy: $orderBy
       searchKeyword: $searchKeyword
     ) {
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
       edges {
+        cursor
         node {
           ...baseInfo
         }
@@ -46,12 +57,18 @@ export const ME = gql`
 export const REPOSITORY = gql`
   ${BASE_INFO}
   ${REVIEW_INFO}
-  query Repository($id: ID!) {
-    repository(id: $id) {
-      url
+  query Query($repositoryId: ID!, $first: Int, $after: String) {
+    repository(id: $repositoryId) {
       ...baseInfo
-      reviews {
+      reviews(first: $first, after: $after) {
+        pageInfo {
+          endCursor
+          hasNextPage
+          hasPreviousPage
+          startCursor
+        }
         edges {
+          cursor
           node {
             ...reviewInfo
           }

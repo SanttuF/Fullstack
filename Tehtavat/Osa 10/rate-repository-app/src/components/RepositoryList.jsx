@@ -50,8 +50,10 @@ export class RepositoryListContainer extends React.Component {
   }
 
   render() {
-    const repositoryNodes = this.props.repositories
-      ? this.props.repositories.edges.map((edge) => edge.node)
+    const { repositories, onEndReach } = this.props
+
+    const repositoryNodes = repositories
+      ? repositories.edges.map((edge) => edge.node)
       : []
 
     return (
@@ -60,6 +62,8 @@ export class RepositoryListContainer extends React.Component {
         ItemSeparatorComponent={ItemSeparator}
         renderItem={RepositoryItemWrapWrap}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
       />
     )
   }
@@ -69,7 +73,34 @@ const RepositoryList = () => {
   const [order, setOrder] = useState('latest')
   const [filter, setFilter] = useState('')
   const [debounceFilter] = useDebounce(filter, 500)
-  const { repositories } = useRepositories(order, debounceFilter)
+
+  let orderBy = ''
+  let orderDirection = ''
+  switch (order) {
+    case 'latest':
+      orderBy = 'CREATED_AT'
+      orderDirection = 'DESC'
+      break
+    case 'highest':
+      orderBy = 'RATING_AVERAGE'
+      orderDirection = 'DESC'
+      break
+    case 'lowest':
+      orderBy = 'RATING_AVERAGE'
+      orderDirection = 'ASC'
+      break
+  }
+
+  const { repositories, fetchMore } = useRepositories({
+    first: 8,
+    orderBy,
+    orderDirection,
+    searchKeyword: debounceFilter,
+  })
+
+  const onEndReach = () => {
+    fetchMore()
+  }
 
   return (
     <RepositoryListContainer
@@ -78,6 +109,7 @@ const RepositoryList = () => {
       filter={filter}
       setOrder={setOrder}
       setFilter={setFilter}
+      onEndReach={onEndReach}
     />
   )
 }

@@ -1,6 +1,6 @@
 import Text from './Text'
 import { format } from 'date-fns'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Alert, Pressable, StyleSheet, View } from 'react-native'
 import theme from '../theme'
 import { useNavigate } from 'react-router-native'
 import useRemove from '../hooks/useRemove'
@@ -63,8 +63,23 @@ const ReviewItem = ({ review, repo }) => {
   const { refetch } = useUser(true)
 
   const removeReview = (id) => {
-    deleteReview(id)
-    refetch()
+    Alert.alert(
+      'Delete review',
+      'Are you sure you want to delete this review',
+      [
+        {
+          text: 'CANCEL',
+          style: 'cancel',
+        },
+        {
+          text: 'DELETE',
+          onPress: () => {
+            deleteReview(id)
+            refetch()
+          },
+        },
+      ]
+    )
   }
 
   return (
