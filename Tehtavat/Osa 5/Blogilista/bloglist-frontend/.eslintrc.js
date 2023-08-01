@@ -4,9 +4,10 @@ module.exports = {
       "es6": true,
       "jest/globals": true 
   },
-  "extends": [ 
-      "eslint:recommended",
-      "plugin:react/recommended"
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime"
   ],
   "parserOptions": {
       "ecmaFeatures": {
@@ -16,7 +17,7 @@ module.exports = {
       "sourceType": "module"
   },
   "plugins": [
-      "react", "jest"
+      "react"
   ],
   "rules": {
       "indent": [
@@ -47,7 +48,7 @@ module.exports = {
       "react/prop-types": 0,
       "react/react-in-jsx-scope": "off"
   },
-  "settings": {
+"settings": {
     "react": {
       "version": "detect"
     }
