@@ -1,0 +1,28 @@
+services:
+  library-frontend:
+    image: front
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: front
+
+  library-backend:
+    image: back
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: back
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: library-reverse-proxy
+    depends_on:
+      - library-backend
+      - library-frontend
